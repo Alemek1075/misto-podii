@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Data Source=/app/data/mistopodii.db
+    volumes:
+      - mistopodii-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  mistopodii-data:

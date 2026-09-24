@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Місто подій API",
+    "description": "Послідовний CRUD та пагінація для навчального API. Запускати на окремій локальній базі.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:5178" },
+    { "key": "organizerId", "value": "" },
+    { "key": "venueId", "value": "" },
+    { "key": "eventId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Події: перша сторінка",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/events?skip=0&limit=1" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Статус 200', () => pm.response.to.have.status(200));",
+        "const page = pm.response.json();",
+        "pm.test('Один елемент і абсолютний nextLink', () => { pm.expect(page.items.length).to.equal(1); pm.expect(page.nextLink).to.match(/^https?:\\/\\//); });"
+      ] } }]
+    },
+    {
+      "name": "Події: некоректна сторінка",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/events?skip=-1&limit=101" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 400', () => pm.response.to.have.status(400));"] } }]
+    },
+    {
+      "name": "Створити організатора",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Postman organizer\",\"description\":\"API test record\",\"contact\":\"postman@example.org\",\"websiteUrl\":\"https://example.org\"}" }, "url": "{{baseUrl}}/api/organizers" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 201', () => pm.response.to.have.status(201));", "pm.collectionVariables.set('organizerId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "Створити місце",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Postman venue\",\"address\":\"Test address\",\"latitude\":50.45,\"longitude\":30.52,\"capacity\":25}" }, "url": "{{baseUrl}}/api/venues" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 201', () => pm.response.to.have.status(201));", "pm.collectionVariables.set('venueId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "Створити подію",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Postman event\",\"description\":\"API test event\",\"category\":\"Test\",\"startsAt\":\"2030-01-01T15:00:00Z\",\"imageUrl\":\"/images/posters.svg\",\"organizerId\":{{organizerId}},\"venueId\":{{venueId}}}" }, "url": "{{baseUrl}}/api/events" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 201', () => pm.response.to.have.status(201));", "pm.collectionVariables.set('eventId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "Прочитати подію",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/events/{{eventId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Подія й UTC час', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().startsAtUtc).to.match(/Z$/); });"] } }]
+    },
+    {
+      "name": "Змінити подію",
+      "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Updated Postman event\",\"description\":\"API test event\",\"category\":\"Test\",\"startsAt\":\"2030-01-01T15:00:00Z\",\"imageUrl\":\"/images/posters.svg\",\"organizerId\":{{organizerId}},\"venueId\":{{venueId}}}" }, "url": "{{baseUrl}}/api/events/{{eventId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 200 та нова назва', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().title).to.equal('Updated Postman event'); });"] } }]
+    },
+    {
+      "name": "Заборонити видалення пов'язаного місця",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/venues/{{venueId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 409', () => pm.response.to.have.status(409));"] } }]
+    },
+    {
+      "name": "Видалити подію",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/events/{{eventId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 204', () => pm.response.to.have.status(204));"] } }]
+    },
+    {
+      "name": "Видалити місце",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/venues/{{venueId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 204', () => pm.response.to.have.status(204));"] } }]
+    },
+    {
+      "name": "Видалити організатора",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/organizers/{{organizerId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Статус 204', () => pm.response.to.have.status(204));"] } }]
+    }
+  ]
+}
