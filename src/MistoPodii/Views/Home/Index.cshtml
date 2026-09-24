@@ -1,0 +1,61 @@
+@model IReadOnlyList<Event>
+@{
+    ViewData["Title"] = "Події міста";
+}
+
+<section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <p class="eyebrow">Афіша локальних зустрічей</p>
+        <h1 id="hero-title">Місто стає ближчим, коли є куди піти.</h1>
+        <p class="hero-lead">Майстерні, музика і сусідські ініціативи в одному місці. Оберіть подію та сплануйте свій день.</p>
+        <a class="btn btn-primary" href="#events">Переглянути події <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="hero-poster" aria-hidden="true">
+        <span class="poster-top">МІСТО / ПОДІЇ</span>
+        <span class="poster-mark">✳</span>
+        <span class="poster-bottom">Знайомі місця.<br />Нові зустрічі.</span>
+    </div>
+</section>
+
+<section id="events" class="events-section" aria-labelledby="events-title">
+    <div class="section-heading">
+        <div><p class="eyebrow">Найближчим часом</p><h2 id="events-title">Знайдіть свою подію</h2></div>
+        <a asp-controller="Events" asp-action="Create" class="text-link">Додати подію ↗</a>
+    </div>
+    <form method="get" class="filter-bar" aria-label="Пошук подій">
+        <label class="visually-hidden" for="q">Пошук за назвою, описом або місцем</label>
+        <input id="q" name="q" class="form-control" value="@ViewBag.Query" placeholder="Назва, тема або місце" />
+        <label class="visually-hidden" for="category">Категорія</label>
+        <select id="category" name="category" class="form-select">
+            <option value="">Усі категорії</option>
+            @foreach (string category in ViewBag.Categories)
+            {
+                <option value="@category" selected="@(ViewBag.Category == category)">@category</option>
+            }
+        </select>
+        <button class="btn btn-primary" type="submit">Знайти</button>
+    </form>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state"><h3>Подій за цим запитом немає</h3><p>Змініть пошук або категорію й спробуйте ще раз.</p></div>
+    }
+    else
+    {
+        <div class="event-timeline">
+            @foreach (var item in Model)
+            {
+                <article class="event-row">
+                    <div class="event-date"><strong>@item.StartsAtUtc.ToString("dd")</strong><span>@item.StartsAtUtc.ToString("MM.yyyy")</span><small>UTC</small></div>
+                    <img class="event-thumb" src="@item.ImageUrl" alt="" loading="lazy" />
+                    <div class="event-summary">
+                        <span class="category">@item.Category</span> <span class="event-status" data-event-id="@item.Id">@EventStatusLabels.Get(item.Status)</span>
+                        <h3><a asp-controller="Events" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h3>
+                        <p>@item.Venue.Name · @item.StartsAtUtc.ToString("HH:mm") UTC</p>
+                    </div>
+                    <a class="row-arrow" asp-controller="Events" asp-action="Details" asp-route-id="@item.Id" aria-label="Деталі: @item.Title">↗</a>
+                </article>
+            }
+        </div>
+    }
+</section>

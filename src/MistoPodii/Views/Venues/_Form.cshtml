@@ -1,0 +1,7 @@
+@model Venue
+<div asp-validation-summary="ModelOnly" class="mb-3"></div>
+<div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name"></span></div>
+<div class="mb-3"><label asp-for="Address" class="form-label"></label><input asp-for="Address" class="form-control" /><span asp-validation-for="Address"></span></div>
+<div class="row"><div class="col-md-6 mb-3"><label asp-for="Latitude" class="form-label"></label><input asp-for="Latitude" type="number" step="any" class="form-control" /><span asp-validation-for="Latitude"></span></div><div class="col-md-6 mb-3"><label asp-for="Longitude" class="form-label"></label><input asp-for="Longitude" type="number" step="any" class="form-control" /><span asp-validation-for="Longitude"></span></div></div>
+<div class="mb-3"><label asp-for="Capacity" class="form-label"></label><input asp-for="Capacity" type="number" min="1" class="form-control" /><span asp-validation-for="Capacity"></span></div>
+<button type="submit" class="btn btn-primary">Зберегти</button> <a asp-action="Index" class="btn btn-link">Скасувати</a>

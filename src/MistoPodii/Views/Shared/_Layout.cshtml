@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Місто подій</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Локальні події, майстерні та зустрічі міста в одному каталозі.")" />
+    @if (ViewData["CanonicalUrl"] is string canonicalUrl)
+    {
+        <link rel="canonical" href="@canonicalUrl" />
+        <meta property="og:url" content="@canonicalUrl" />
+    }
+    @if (ViewData["OgImage"] is string ogImage)
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@ViewData["Title"] · Місто подій" />
+    <meta property="og:description" content="@(ViewData["Description"] ?? "Локальні події, майстерні та зустрічі міста в одному каталозі.")" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="site-header">
+        <nav class="container site-nav navbar-light" aria-label="Головна навігація">
+            <a class="brand" asp-controller="Home" asp-action="Index"><span class="brand-symbol" aria-hidden="true">✳</span><span>місто<span class="brand-dot">.</span>подій</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Відкрити меню"><span class="navbar-toggler-icon"></span></button>
+            <div id="main-nav" class="collapse navbar-collapse nav-links">
+                <a asp-controller="Home" asp-action="Index">Афіша</a>
+                <a asp-controller="Map" asp-action="Index">Мапа</a>
+                <a asp-controller="Live" asp-action="Index">Наживо</a>
+                <a asp-controller="Events" asp-action="Index">Керувати подіями</a>
+                <a asp-controller="Venues" asp-action="Index">Місця</a>
+                <a asp-controller="Organizers" asp-action="Index">Організатори</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container" id="main-content">@RenderBody()</main>
+    <footer class="site-footer"><div class="container"><span>Місто подій · навчальний проєкт</span><span>Час подій зазначено за UTC</span></div></footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/live-status.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

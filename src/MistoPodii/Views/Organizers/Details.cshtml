@@ -1,0 +1,6 @@
+@model Organizer
+@{ ViewData["Title"] = Model.Name; }
+<div class="page-shell"><div class="page-heading"><div><p class="eyebrow">Організатор</p><h1>@Model.Name</h1></div><div class="action-links"><a asp-action="Edit" asp-route-id="@Model.Id">Змінити</a><a asp-action="Index">Усі організатори</a></div></div>
+<div class="detail-grid"><div class="detail-copy">@Model.Description</div><aside class="detail-aside"><h2 class="h4">Зв'язок</h2><p>@Model.Contact</p>@if (!string.IsNullOrEmpty(Model.WebsiteUrl)) { <a href="@Model.WebsiteUrl" rel="noopener noreferrer">Вебсайт ↗</a> }</aside></div>
+<h2 class="h4">Події організатора</h2>@if (Model.Events.Count == 0) { <p>Подій поки немає.</p> } else { <ul>@foreach (var item in Model.Events.OrderBy(e => e.StartsAtUtc)) { <li><a asp-controller="Events" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></li> }</ul> }
+</div>

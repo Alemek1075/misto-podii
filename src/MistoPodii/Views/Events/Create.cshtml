@@ -1,0 +1,4 @@
+@model Event
+@{ ViewData["Title"] = "Нова подія"; }
+<div class="page-shell"><div class="page-heading"><div><p class="eyebrow">Редактор афіші</p><h1>Нова подія</h1></div></div><form asp-action="Create" method="post" class="form-panel"><partial name="_Form" model="Model" /></form></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /><script src="~/js/venue-autocomplete.js" asp-append-version="true"></script> }

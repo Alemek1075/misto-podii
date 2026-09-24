@@ -1,0 +1,4 @@
+@model Organizer
+@{ ViewData["Title"] = "Змінити організатора"; }
+<div class="page-shell"><div class="page-heading"><div><p class="eyebrow">Спільнота</p><h1>Змінити організатора</h1></div></div><form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="form-panel"><input type="hidden" asp-for="Id" /><partial name="_Form" model="Model" /></form></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

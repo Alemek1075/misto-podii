@@ -1,0 +1,23 @@
+@{ ViewData["Title"] = "Мапа подій"; }
+@section Styles { <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" /> }
+<div class="page-shell map-page">
+    <div class="page-heading"><div><p class="eyebrow">Події поруч</p><h1>Мапа подій</h1></div><a asp-controller="Home" asp-action="Index" class="text-link">До афіші ↗</a></div>
+    <p class="map-intro">Оберіть тему або дату. Позначки на мапі та діаграма покажуть лише відповідні події.</p>
+    <form id="map-filters" class="filter-bar" aria-label="Фільтри мапи">
+        <label class="visually-hidden" for="map-category">Категорія</label>
+        <select id="map-category" class="form-select"><option value="">Усі категорії</option>@foreach (string category in ViewBag.Categories) { <option value="@category">@category</option> }</select>
+        <label class="visually-hidden" for="map-date">Дата за UTC</label>
+        <input id="map-date" type="date" class="form-control" aria-label="Дата за UTC" />
+        <button type="reset" class="btn btn-outline-primary">Скинути фільтри</button>
+    </form>
+    <div class="map-layout">
+        <section aria-labelledby="map-title"><h2 id="map-title" class="visually-hidden">Позначки подій</h2><div id="events-map" data-url="@Url.Action("Data", "Map")" aria-label="Інтерактивна мапа місць подій"></div><p id="map-status" class="map-status" role="status">Завантажуємо події…</p></section>
+        <aside class="map-stats" aria-labelledby="stats-title"><p class="eyebrow">Розподіл</p><h2 id="stats-title">Події за темами</h2><div class="chart-wrap"><canvas id="category-chart" aria-label="Кількість подій за категоріями" role="img"></canvas></div><ul id="category-summary" class="category-summary"></ul></aside>
+    </div>
+    <section class="map-results" aria-labelledby="results-title"><h2 id="results-title">Список подій</h2><ul id="map-event-list"></ul></section>
+</div>
+@section Scripts {
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    <script src="~/lib/chartjs/chart.umd.js"></script>
+    <script src="~/js/event-map.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,6 @@
+@model IReadOnlyList<Event>
+@{ ViewData["Title"] = "Керувати подіями"; }
+<div class="page-shell"><div class="page-heading"><div><p class="eyebrow">Редактор афіші</p><h1>Події</h1></div><a class="btn btn-primary" asp-action="Create">Додати подію</a></div><div class="data-panel">
+@if (Model.Count == 0) { <p>Подій поки немає. Додайте першу подію.</p> }
+else { <table class="data-table"><thead><tr><th>Подія</th><th>Початок (UTC)</th><th>Статус</th><th>Місце</th><th>Дії</th></tr></thead><tbody>@foreach (var item in Model) { <tr><td><a asp-action="Details" asp-route-id="@item.Id">@item.Title</a></td><td>@item.StartsAtUtc.ToString("dd.MM.yyyy HH:mm")</td><td><span class="event-status" data-event-id="@item.Id">@EventStatusLabels.Get(item.Status)</span></td><td>@item.Venue.Name</td><td><div class="action-links"><a asp-action="Edit" asp-route-id="@item.Id">Змінити</a><a asp-action="Delete" asp-route-id="@item.Id">Видалити</a></div></td></tr> }</tbody></table> }
+</div></div>

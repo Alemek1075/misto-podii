@@ -1,0 +1,25 @@
+@model IReadOnlyList<Event>
+@{ ViewData["Title"] = "Живі оновлення"; }
+<div class="page-shell live-page">
+    <div class="page-heading"><div><p class="eyebrow">Місто зараз</p><h1>Живі оновлення</h1></div></div>
+    <p class="map-intro">Змініть статус події в іншій вкладці. Новий стан з'явиться тут без перезавантаження.</p>
+    <p id="live-connection" role="status">Підключаємо живі оновлення…</p>
+    <div class="live-list">
+        @foreach (var item in Model)
+        {
+            <article class="live-row"><div><a asp-controller="Events" asp-action="Details" asp-route-id="@item.Id">@item.Title</a><span class="event-status" data-event-id="@item.Id">@EventStatusLabels.Get(item.Status)</span></div><a asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">Змінити статус</a></article>
+        }
+    </div>
+    <section class="benchmark" aria-labelledby="benchmark-title">
+        <p class="eyebrow">Порівняння транспортів</p>
+        <h2 id="benchmark-title">Як швидко проходить повідомлення?</h2>
+        <p>Перевірка послідовно відкриває WebSockets, Server Sent Events і Long Polling та виконує по 20 однакових викликів Echo. Результати залежать від браузера й мережі.</p>
+        <button id="run-benchmark" class="btn btn-primary" type="button">Запустити замір</button>
+        <p id="benchmark-status" role="status"></p>
+        <div class="data-panel benchmark-table-wrap"><table class="data-table"><thead><tr><th>Транспорт</th><th>Підключення</th><th>Медіана RTT</th><th>HTTP запитів</th><th>HTTP байтів</th></tr></thead><tbody id="benchmark-results"></tbody></table></div>
+        <p class="benchmark-note">RTT охоплює виклик і відповідь. Лічильники HTTP беруться з Resource Timing браузера. Кадри WebSocket до цих байтів не входять, тому колонка не є повним обсягом мережевого трафіку.</p>
+        <a id="benchmark-download" class="text-link" hidden>Завантажити сирі виміри JSON</a>
+        <details id="benchmark-raw-panel" hidden><summary>Переглянути сирі виміри</summary><pre id="benchmark-raw"></pre></details>
+    </section>
+</div>
+@section Scripts { <script src="~/js/transport-benchmark.js" asp-append-version="true"></script> }

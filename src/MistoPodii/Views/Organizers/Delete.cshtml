@@ -1,0 +1,3 @@
+@model Organizer
+@{ ViewData["Title"] = "Видалити організатора"; }
+<div class="page-shell"><div class="page-heading"><div><p class="eyebrow">Підтвердження</p><h1>Видалити організатора?</h1></div></div><div class="form-panel"><p><strong>@Model.Name</strong> буде видалено. Цю дію не можна скасувати.</p><div asp-validation-summary="ModelOnly"></div><form asp-action="Delete" asp-route-id="@Model.Id" method="post"><button class="btn btn-danger" type="submit">Видалити</button> <a class="btn btn-link" asp-action="Details" asp-route-id="@Model.Id">Скасувати</a></form></div></div>

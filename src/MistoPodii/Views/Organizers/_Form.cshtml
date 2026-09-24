@@ -1,0 +1,7 @@
+@model Organizer
+<div asp-validation-summary="ModelOnly" class="mb-3"></div>
+<div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name"></span></div>
+<div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="5"></textarea><span asp-validation-for="Description"></span></div>
+<div class="mb-3"><label asp-for="Contact" class="form-label"></label><input asp-for="Contact" class="form-control" /><span asp-validation-for="Contact"></span></div>
+<div class="mb-3"><label asp-for="WebsiteUrl" class="form-label"></label><input asp-for="WebsiteUrl" class="form-control" placeholder="https://example.org" /><span asp-validation-for="WebsiteUrl"></span></div>
+<button type="submit" class="btn btn-primary">Зберегти</button> <a asp-action="Index" class="btn btn-link">Скасувати</a>
